@@ -34,9 +34,7 @@ export const App = (): ReactElement => {
         result -= num;
       } else if (operation == '/') {
         if (num == 0) {
-          operations.current = [];
-          curType.current = inputDataType.Number;
-          setDisplay('ERROR');
+          handleError();
           return;
         }
         result /= num;
@@ -68,6 +66,12 @@ export const App = (): ReactElement => {
     operations.current = [];
     curType.current = inputDataType.Number;
     setDisplay('Overflow');
+  };
+
+  const handleError = () => {
+    operations.current = [];
+    curType.current = inputDataType.Number;
+    setDisplay('ERROR');
   };
 
   const addNumber = (num: string) => {
