@@ -1,37 +1,41 @@
-import { ReactElement, useEffect, useState } from 'react';
+import { ReactElement, useEffect, useRef, useState } from 'react';
 
 enum inputDataType {
   'Number',
   'Operation',
 }
 
-let operations: Array<string> = [];
-let curType: number = inputDataType.Number;
+// let operations: Array<string> = [];
+// let curType: number = inputDataType.Number;
 
 export const App = (): ReactElement => {
+  const operations: React.MutableRefObject<string[]> = useRef([]);
+  const curType: React.MutableRefObject<inputDataType> = useRef(
+    inputDataType.Number
+  );
   const [display, setDisplay] = useState<string>('0');
 
   const calculateResult = () => {
-    if (operations.length <= 1) {
+    if (operations.current.length <= 1) {
       return;
     }
-    operations.push(display);
-    if (operations.length % 2 === 0) {
+    operations.current = [...operations.current, display]; //.push(display);
+    if (operations.current.length % 2 === 0) {
       return;
     }
 
-    let result = Number(operations[0]);
-    for (let i = 2; i < operations.length; i = i + 2) {
-      const operation = operations[i - 1];
-      const num = Number(operations[i]);
+    let result = Number(operations.current[0]);
+    for (let i = 2; i < operations.current.length; i = i + 2) {
+      const operation = operations.current[i - 1];
+      const num = Number(operations.current[i]);
       if (operation == '+') {
         result += num;
       } else if (operation == '-') {
         result -= num;
       } else if (operation == '/') {
         if (num == 0) {
-          operations = [];
-          curType = inputDataType.Number;
+          operations.current = [];
+          curType.current = inputDataType.Number;
           setDisplay('ERROR');
           return;
         }
@@ -45,14 +49,14 @@ export const App = (): ReactElement => {
       handleOverflow();
       return;
     }
-    operations = [result.toString()];
-    curType = inputDataType.Number;
+    operations.current = [result.toString()];
+    curType.current = inputDataType.Number;
     setDisplay(result.toString());
   };
 
   const clearDisplay = () => {
-    operations = [];
-    curType = inputDataType.Number;
+    operations.current = [];
+    curType.current = inputDataType.Number;
     setDisplay('0');
   };
 
@@ -61,8 +65,8 @@ export const App = (): ReactElement => {
   };
 
   const handleOverflow = () => {
-    operations = [];
-    curType = inputDataType.Number;
+    operations.current = [];
+    curType.current = inputDataType.Number;
     setDisplay('Overflow');
   };
 
@@ -76,11 +80,11 @@ export const App = (): ReactElement => {
       return;
     }
 
-    if (curType === inputDataType.Number || display === '0') {
-      curType = inputDataType.Operation;
+    if (curType.current === inputDataType.Number || display === '0') {
+      curType.current = inputDataType.Operation;
       setDisplay(num);
-      if (operations.length == 1) {
-        operations = [];
+      if (operations.current.length == 1) {
+        operations.current = [];
       }
     } else {
       setDisplay(display + num);
@@ -93,15 +97,15 @@ export const App = (): ReactElement => {
     } else if (op == '%') {
       setDisplay((Number(display) / 100).toString());
     } else {
-      if (operations.length === 1) {
-        operations.push(op);
-        curType = inputDataType.Number;
+      if (operations.current.length === 1) {
+        operations.current.push(op);
+        curType.current = inputDataType.Number;
         return;
       }
-      if (curType === inputDataType.Operation) {
-        operations.push(display);
-        operations.push(op);
-        curType = inputDataType.Number;
+      if (curType.current === inputDataType.Operation) {
+        operations.current.push(display);
+        operations.current.push(op);
+        curType.current = inputDataType.Number;
       }
     }
   };
@@ -156,8 +160,8 @@ export const App = (): ReactElement => {
       <div
         css={{
           display: 'grid',
-          gridTemplateColumns: `repeat(${4}, 1fr)`,
-          gridTemplateRows: `repeat(${4}, 1fr)`,
+          gridTemplateColumns: `repeat(4, 1fr)`,
+          gridTemplateRows: `repeat(4, 1fr)`,
           gridGap: 2,
           width: '90%',
           height: '100%',
