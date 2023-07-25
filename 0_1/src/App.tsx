@@ -27,44 +27,17 @@ enum keyType {
   RESULT,
   OTHER,
 }
-
-const keyData = [
-  [
-    { type: keyType.CLEAR, key: 'AC', value: keyType.CLEAR },
-    { type: keyType.OTHER, key: '+/-', value: operationType.SIGN_CHANGE },
-    { type: keyType.OTHER, key: '%', value: operationType.PERCENTAGE },
-    {
-      type: keyType.OPERATION,
-      key: '/',
-      value: operationType.DIVIDE,
-    },
-    { type: keyType.NUMBER, key: '7', value: 7 },
-    { type: keyType.NUMBER, key: '8', value: 6 },
-    { type: keyType.NUMBER, key: '9', value: 5 },
-    {
-      type: keyType.OPERATION,
-      key: '*',
-      value: operationType.MULTIPLE,
-    },
-    { type: keyType.NUMBER, key: '4', value: 4 },
-    { type: keyType.NUMBER, key: '5', value: 5 },
-    { type: keyType.NUMBER, key: '6', value: 6 },
-    { type: keyType.OPERATION, key: '-', value: operationType.MINUS },
-    { type: keyType.NUMBER, key: '1', value: 1 },
-    { type: keyType.NUMBER, key: '2', value: 2 },
-    { type: keyType.NUMBER, key: '3', value: 3 },
-    { type: keyType.OPERATION, key: '+', value: operationType.ADD },
-  ],
-  [
-    { type: keyType.ZERO, key: '0', value: keyType.ZERO },
-    { type: keyType.DOT, key: '.', value: keyType.DOT },
-    { type: keyType.RESULT, key: '=', value: keyType.RESULT },
-  ],
-];
 interface calculationResult {
   status: calculationStatusType;
   result: number | null;
 }
+
+type keyDataType = {
+  type: keyType;
+  key: string;
+  value: number;
+  click: () => void;
+};
 
 export const App = (): ReactElement => {
   const calculationHistory: React.MutableRefObject<number[] | operationType[]> =
@@ -75,6 +48,82 @@ export const App = (): ReactElement => {
     numberType.RADIX
   );
   const [display, setDisplay] = useState<string>('0');
+
+  const keyData: Array<Array<keyDataType>> = [
+    [
+      {
+        type: keyType.CLEAR,
+        key: 'AC',
+        value: keyType.CLEAR,
+        click: () => clearDisplay(),
+      },
+      {
+        type: keyType.OTHER,
+        key: '+/-',
+        value: operationType.SIGN_CHANGE,
+        click: () => calculateCurrentNumber(operationType.SIGN_CHANGE),
+      },
+      {
+        type: keyType.OTHER,
+        key: '%',
+        value: operationType.PERCENTAGE,
+        click: () => calculateCurrentNumber(operationType.PERCENTAGE),
+      },
+      {
+        type: keyType.OPERATION,
+        key: '/',
+        value: operationType.DIVIDE,
+        click: () => addOperation(operationType.DIVIDE),
+      },
+      { type: keyType.NUMBER, key: '7', value: 7, click: () => addNumber(7) },
+      { type: keyType.NUMBER, key: '8', value: 6, click: () => addNumber(8) },
+      { type: keyType.NUMBER, key: '9', value: 5, click: () => addNumber(9) },
+      {
+        type: keyType.OPERATION,
+        key: '*',
+        value: operationType.MULTIPLE,
+        click: () => addOperation(operationType.MULTIPLE),
+      },
+      { type: keyType.NUMBER, key: '4', value: 4, click: () => addNumber(4) },
+      { type: keyType.NUMBER, key: '5', value: 5, click: () => addNumber(5) },
+      { type: keyType.NUMBER, key: '6', value: 6, click: () => addNumber(6) },
+      {
+        type: keyType.OPERATION,
+        key: '-',
+        value: operationType.MINUS,
+        click: () => addOperation(operationType.MINUS),
+      },
+      { type: keyType.NUMBER, key: '1', value: 1, click: () => addNumber(1) },
+      { type: keyType.NUMBER, key: '2', value: 2, click: () => addNumber(2) },
+      { type: keyType.NUMBER, key: '3', value: 3, click: () => addNumber(3) },
+      {
+        type: keyType.OPERATION,
+        key: '+',
+        value: operationType.ADD,
+        click: () => addOperation(operationType.ADD),
+      },
+    ],
+    [
+      {
+        type: keyType.ZERO,
+        key: '0',
+        value: keyType.ZERO,
+        click: () => addNumber(0),
+      },
+      {
+        type: keyType.DOT,
+        key: '.',
+        value: keyType.DOT,
+        click: () => addDot(),
+      },
+      {
+        type: keyType.RESULT,
+        key: '=',
+        value: keyType.RESULT,
+        click: () => calculateResult(),
+      },
+    ],
+  ];
 
   const calculate = (
     num1: number,
