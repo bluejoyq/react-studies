@@ -5,3 +5,7 @@ button {
     border: none;
     font-size: 8vmin;
 }
+
+body {
+    background-color: black;
+}
