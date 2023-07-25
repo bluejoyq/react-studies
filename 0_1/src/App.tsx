@@ -42,6 +42,7 @@ export const App = (): ReactElement => {
     }
 
     if (isOverflow(result.toString())) {
+      handleOverflow();
       return;
     }
     operations = [result.toString()];
@@ -56,17 +57,18 @@ export const App = (): ReactElement => {
   };
 
   const isOverflow = (num: string) => {
-    if (num.length >= 10) {
-      operations = [];
-      curType = type.Number;
-      setDisplay('Overflow');
-      return true;
-    }
-    return false;
+    return num.length >= 10;
+  };
+
+  const handleOverflow = () => {
+    operations = [];
+    curType = type.Number;
+    setDisplay('Overflow');
   };
 
   const addNumber = (num: string) => {
     if (isOverflow(display)) {
+      handleOverflow();
       return;
     }
 
