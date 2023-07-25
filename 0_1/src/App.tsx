@@ -1,12 +1,12 @@
 import { ReactElement, useEffect, useState } from 'react';
 
-export enum type {
+enum inputDataType {
   'Number',
   'Operation',
 }
 
 let operations: Array<string> = [];
-let curType: number = type.Number;
+let curType: number = inputDataType.Number;
 
 export const App = (): ReactElement => {
   const [display, setDisplay] = useState<string>('0');
@@ -31,7 +31,7 @@ export const App = (): ReactElement => {
       } else if (operation == '/') {
         if (num == 0) {
           operations = [];
-          curType = type.Number;
+          curType = inputDataType.Number;
           setDisplay('ERROR');
           return;
         }
@@ -46,13 +46,13 @@ export const App = (): ReactElement => {
       return;
     }
     operations = [result.toString()];
-    curType = type.Number;
+    curType = inputDataType.Number;
     setDisplay(result.toString());
   };
 
   const clearDisplay = () => {
     operations = [];
-    curType = type.Number;
+    curType = inputDataType.Number;
     setDisplay('0');
   };
 
@@ -62,7 +62,7 @@ export const App = (): ReactElement => {
 
   const handleOverflow = () => {
     operations = [];
-    curType = type.Number;
+    curType = inputDataType.Number;
     setDisplay('Overflow');
   };
 
@@ -76,8 +76,8 @@ export const App = (): ReactElement => {
       return;
     }
 
-    if (curType === type.Number || display === '0') {
-      curType = type.Operation;
+    if (curType === inputDataType.Number || display === '0') {
+      curType = inputDataType.Operation;
       setDisplay(num);
       if (operations.length == 1) {
         operations = [];
@@ -95,13 +95,13 @@ export const App = (): ReactElement => {
     } else {
       if (operations.length === 1) {
         operations.push(op);
-        curType = type.Number;
+        curType = inputDataType.Number;
         return;
       }
-      if (curType === type.Operation) {
+      if (curType === inputDataType.Operation) {
         operations.push(display);
         operations.push(op);
-        curType = type.Number;
+        curType = inputDataType.Number;
       }
     }
   };
