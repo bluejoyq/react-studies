@@ -19,7 +19,7 @@ export const App = (): ReactElement => {
     if (operations.current.length <= 1) {
       return;
     }
-    operations.current = [...operations.current, display]; //.push(display);
+    operations.current.push(display);
     if (operations.current.length % 2 === 0) {
       return;
     }
