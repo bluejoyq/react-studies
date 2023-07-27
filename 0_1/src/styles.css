@@ -2,22 +2,6 @@ body {
     background-color: black;
 }
 
-button {
-    background-color: #2c2e34;
-    color: lightgray;
-    aspect-ratio: 1/1;
-    border: none;
-    font-size: 8vmin;
-}
-
-.button-style-1 {
-    aspect-ratio: 1/1;
-}
-
-.button-style-2 {
-    aspect-ratio: 2/1;
-}
-
 .flex-box {
     padding: 20px;
     display: flex;
@@ -26,13 +10,13 @@ button {
     height: 100%;
     gap: 2px;
     background-color: black;
+    font-size: 15vmin;
 }
 
 .grid {
     text-align: right;
     background-color: #383a40;
     color: lightgray;
-    font-size: 15vmin;
     width: 90%;
 }
 
@@ -51,4 +35,20 @@ button {
     grid-gap: 2px;
     width: 90%;
     height: 100%;
+}
+
+button {
+    background-color: #2c2e34;
+    color: lightgray;
+    aspect-ratio: 1/1;
+    border: none;
+    font-size: 50%;
+}
+
+.button-style-1 {
+    aspect-ratio: 1/1;
+}
+
+.button-style-2 {
+    aspect-ratio: 2/1;
 }
