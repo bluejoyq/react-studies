@@ -320,25 +320,25 @@ export const App = (): ReactElement => {
     }
 
     setDisplay(newDisplay);
-    console.log(calculationHistory.current);
-  };
-  const handleKeyUp = (e: any) => {
-    if (e.key === 'Enter') {
-      calculateResult();
-    } else if (e.key === 'Add') {
-      addOperation(operationType.ADD);
-    } else if (e.key === 'Subtract') {
-      addOperation(operationType.MINUS);
-    } else if (e.key === 'Divide') {
-      addOperation(operationType.DIVIDE);
-    } else if (e.key === 'Multiply') {
-      addOperation(operationType.MULTIPLE);
-    } else if (e.key === 'Escape') {
-      clearDisplay();
-    }
   };
 
   useEffect(() => {
+    const handleKeyUp = (e: any) => {
+      if (e.key === 'Enter') {
+        calculateResult();
+      } else if (e.key === '+') {
+        addOperation(operationType.ADD);
+      } else if (e.key === '-') {
+        addOperation(operationType.MINUS);
+      } else if (e.key === '/') {
+        addOperation(operationType.DIVIDE);
+      } else if (e.key === '*') {
+        addOperation(operationType.MULTIPLE);
+      } else if (e.key === 'Escape') {
+        clearDisplay();
+      }
+    };
+
     window.addEventListener('keyup', handleKeyUp);
 
     return () => {
