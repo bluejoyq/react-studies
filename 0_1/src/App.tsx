@@ -18,25 +18,16 @@ enum calculationStatusType {
   OVERFLOW,
   END,
 }
-enum keyType {
-  NUMBER,
-  OPERATION,
-  DOT,
-  CLEAR,
-  ZERO,
-  RESULT,
-  OTHER,
-}
 interface calculationResult {
   status: calculationStatusType;
   result: number | null;
 }
 
 type keyDataType = {
-  type: keyType;
-  key: string;
-  value: number;
+  key: number;
+  label: string;
   click: () => void;
+  className: string;
 };
 
 export const App = (): ReactElement => {
@@ -52,75 +43,120 @@ export const App = (): ReactElement => {
   const keyData: Array<Array<keyDataType>> = [
     [
       {
-        type: keyType.CLEAR,
-        key: 'AC',
-        value: keyType.CLEAR,
+        key: 0,
+        label: 'AC',
         click: () => clearDisplay(),
+        className: 'button-style-1',
       },
       {
-        type: keyType.OTHER,
-        key: '+/-',
-        value: operationType.SIGN_CHANGE,
+        key: 1,
+        label: '+/-',
         click: () => calculateCurrentNumber(operationType.SIGN_CHANGE),
+        className: 'button-style-1',
       },
       {
-        type: keyType.OTHER,
-        key: '%',
-        value: operationType.PERCENTAGE,
+        key: 2,
+        label: '%',
         click: () => calculateCurrentNumber(operationType.PERCENTAGE),
+        className: 'button-style-1',
       },
       {
-        type: keyType.OPERATION,
-        key: '/',
-        value: operationType.DIVIDE,
+        key: 3,
+        label: '/',
         click: () => addOperation(operationType.DIVIDE),
+        className: 'button-style-1',
       },
-      { type: keyType.NUMBER, key: '7', value: 7, click: () => addNumber(7) },
-      { type: keyType.NUMBER, key: '8', value: 6, click: () => addNumber(8) },
-      { type: keyType.NUMBER, key: '9', value: 5, click: () => addNumber(9) },
       {
-        type: keyType.OPERATION,
-        key: '*',
-        value: operationType.MULTIPLE,
+        key: 4,
+        label: '7',
+        click: () => addNumber(7),
+        className: 'button-style-1',
+      },
+      {
+        key: 5,
+        label: '8',
+        click: () => addNumber(8),
+        className: 'button-style-1',
+      },
+      {
+        key: 6,
+        label: '9',
+        click: () => addNumber(9),
+        className: 'button-style-1',
+      },
+      {
+        key: 7,
+        label: '*',
         click: () => addOperation(operationType.MULTIPLE),
+        className: 'button-style-1',
       },
-      { type: keyType.NUMBER, key: '4', value: 4, click: () => addNumber(4) },
-      { type: keyType.NUMBER, key: '5', value: 5, click: () => addNumber(5) },
-      { type: keyType.NUMBER, key: '6', value: 6, click: () => addNumber(6) },
       {
-        type: keyType.OPERATION,
-        key: '-',
-        value: operationType.MINUS,
+        key: 8,
+        label: '4',
+        click: () => addNumber(4),
+        className: 'button-style-1',
+      },
+      {
+        key: 9,
+        label: '5',
+        click: () => addNumber(5),
+        className: 'button-style-1',
+      },
+      {
+        key: 10,
+        label: '6',
+        click: () => addNumber(6),
+        className: 'button-style-1',
+      },
+      {
+        key: 11,
+        label: '-',
         click: () => addOperation(operationType.MINUS),
+        className: 'button-style-1',
       },
-      { type: keyType.NUMBER, key: '1', value: 1, click: () => addNumber(1) },
-      { type: keyType.NUMBER, key: '2', value: 2, click: () => addNumber(2) },
-      { type: keyType.NUMBER, key: '3', value: 3, click: () => addNumber(3) },
       {
-        type: keyType.OPERATION,
-        key: '+',
-        value: operationType.ADD,
+        key: 12,
+        label: '1',
+        click: () => addNumber(1),
+        className: 'button-style-1',
+      },
+      {
+        key: 12,
+        label: '2',
+        click: () => addNumber(2),
+        className: 'button-style-1',
+      },
+      {
+        key: 13,
+        label: '3',
+        click: () => addNumber(3),
+        className: 'button-style-1',
+      },
+      {
+        key: 14,
+        label: '+',
         click: () => addOperation(operationType.ADD),
+        className: 'button-style-1',
       },
     ],
     [
       {
-        type: keyType.ZERO,
-        key: '0',
-        value: keyType.ZERO,
+        key: 15,
+        label: '0',
         click: () => addNumber(0),
+        className: 'button-style-2',
       },
       {
-        type: keyType.DOT,
-        key: '.',
-        value: keyType.DOT,
+        key: 16,
+        label: '.',
         click: () => addDot(),
+        className: 'button-style-1',
       },
       {
-        type: keyType.RESULT,
-        key: '=',
-        value: keyType.RESULT,
+        key: 17,
+        label: '=',
         click: () => calculateResult(),
+        className: 'button-style-1',
       },
     ],
   ];
@@ -291,86 +327,6 @@ export const App = (): ReactElement => {
     setDisplay(newDisplay);
     console.log(calculationHistory.current);
   };
-
-  const renderKey = (type: keyType, key: string, value: number) => {
-    switch (type) {
-      case keyType.NUMBER:
-        return (
-          <button key={key} onClick={() => addNumber(value)}>
-            {key}
-          </button>
-        );
-      case keyType.OPERATION:
-        return (
-          <button
-            key={key}
-            onClick={() => {
-              calculateCurrentNumber(value);
-            }}
-          >
-            {key}
-          </button>
-        );
-      case keyType.CLEAR:
-        return (
-          <button
-            key={key}
-            css={{
-              backgroundColor: '#2c2e34',
-              color: 'lightgray',
-              aspectRatio: '1/1',
-              border: 'none',
-              fontSize: '8vmin',
-            }}
-            onClick={clearDisplay}
-          >
-            AC
-          </button>
-        );
-      case keyType.DOT:
-        return (
-          <button key={key} onClick={() => addDot()}>
-            {key}
-          </button>
-        );
-      case keyType.ZERO:
-        return (
-          <button
-            key={key}
-            css={{
-              backgroundColor: '#2c2e34',
-              color: 'lightgray',
-              aspectRatio: '2/1',
-              border: 'none',
-              fontSize: '8vmin',
-            }}
-            onClick={() => addNumber(value)}
-          >
-            {key}
-          </button>
-        );
-      case keyType.RESULT:
-        return (
-          <button key={key} onClick={calculateResult}>
-            {key}
-          </button>
-        );
-      case keyType.OTHER:
-        return (
-          <button
-            key={key}
-            onClick={() => {
-              calculateCurrentNumber(value);
-            }}
-          >
-            {key}
-          </button>
-        );
-      default:
-        return;
-    }
-  };
-
   const handleKeyUp = (e: any) => {
     if (e.key === 'Enter') {
       calculateResult();
@@ -396,53 +352,34 @@ export const App = (): ReactElement => {
   }, []);
 
   return (
-    <div
-      css={{
-        padding: 20,
-        display: 'flex',
-        flexDirection: 'column',
-        width: '100%',
-        height: '100%',
-        gap: 2,
-        backgroundColor: 'black',
-      }}
-    >
-      <div
-        css={{
-          textAlign: 'right',
-          backgroundColor: '#383a40',
-          color: 'lightgray',
-          fontSize: '15vmin',
-          width: '90%',
-        }}
-      >
+    <div className="flex-box">
+      <div className="grid">
         <div css={{ marginRight: '5px' }}>{display}</div>
       </div>
-      <div
-        css={{
-          display: 'grid',
-          gridTemplateColumns: `repeat(4, 1fr)`,
-          gridTemplateRows: `repeat(4, 1fr)`,
-          gridGap: 2,
-          width: '90%',
-          height: '100%',
-        }}
-      >
-        {keyData[0].map((data: any) => {
-          return renderKey(data.type, data.key, data.value);
+      <div className="grid-style-1">
+        {keyData[0].map((data: keyDataType) => {
+          return (
+            <button
+              key={data.label}
+              className={data.className}
+              onClick={data.click}
+            >
+              {data.label}
+            </button>
+          );
         })}
       </div>
-      <div
-        css={{
-          display: 'grid',
-          gridTemplateColumns: `2fr 1fr 1fr`,
-          gridGap: 2,
-          width: '90%',
-          height: '100%',
-        }}
-      >
-        {keyData[1].map((data: any) => {
-          return renderKey(data.type, data.key, data.value);
+      <div className="grid-style-2">
+        {keyData[1].map((data: keyDataType) => {
+          return (
+            <button
+              key={data.label}
+              className={data.className}
+              onClick={data.click}
+            >
+              {data.label}
+            </button>
+          );
         })}
       </div>
     </div>
