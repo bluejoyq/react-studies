@@ -256,10 +256,6 @@ export const App = (): ReactElement => {
   const addNumber = (num: number) => {
     let newDisplay;
 
-    console.log(
-      calculationStatus.current.toString(),
-      inputNumberType.current.toString()
-    );
     const size = calculationHistory.current.length;
     if (calculationStatus.current === calculationStatusType.END) {
       newDisplay = num.toString();
@@ -300,7 +296,6 @@ export const App = (): ReactElement => {
     }
     calculationHistory.current.push(op);
     resetCalculationStatus();
-    console.log(calculationHistory.current);
   };
   const calculateCurrentNumber = (op: operationType) => {
     const size = calculationHistory.current.length;
@@ -362,7 +357,10 @@ export const App = (): ReactElement => {
             <button
               key={data.label}
               className={data.className}
-              onClick={data.click}
+              onClick={(e) => {
+                e.currentTarget.blur();
+                data.click();
+              }}
             >
               {data.label}
             </button>
@@ -375,7 +373,10 @@ export const App = (): ReactElement => {
             <button
               key={data.label}
               className={data.className}
-              onClick={data.click}
+              onClick={(e) => {
+                e.currentTarget.blur();
+                data.click();
+              }}
             >
               {data.label}
             </button>
