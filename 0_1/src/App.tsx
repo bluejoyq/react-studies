@@ -323,7 +323,7 @@ export const App = (): ReactElement => {
   };
 
   useEffect(() => {
-    const handleKeyUp = (e: any) => {
+    const handleKeyUp = (e: KeyboardEvent) => {
       if (e.key === 'Enter') {
         calculateResult();
       } else if (e.key === '+') {
