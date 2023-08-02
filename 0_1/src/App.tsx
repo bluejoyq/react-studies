@@ -1,4 +1,4 @@
-import { ReactElement, useEffect, useRef, useState } from 'react';
+import { ReactElement, useCallback, useEffect, useRef, useState } from 'react';
 
 enum numberType {
   RADIX,
@@ -24,7 +24,6 @@ interface calculationResult {
 }
 
 type keyDataType = {
-  key: number;
   label: string;
   click: () => void;
   className: string;
@@ -40,125 +39,102 @@ export const App = (): ReactElement => {
   );
   const [display, setDisplay] = useState<string>('0');
 
-  const keyData: Array<Array<keyDataType>> = [
-    [
-      {
-        key: 0,
-        label: 'AC',
-        click: () => clearDisplay(),
-        className: 'button-style-1',
-      },
-      {
-        key: 1,
-        label: '+/-',
-        click: () => calculateCurrentNumber(operationType.SIGN_CHANGE),
-        className: 'button-style-1',
-      },
-      {
-        key: 2,
-        label: '%',
-        click: () => calculateCurrentNumber(operationType.PERCENTAGE),
-        className: 'button-style-1',
-      },
-      {
-        key: 3,
-        label: '/',
-        click: () => addOperation(operationType.DIVIDE),
-        className: 'button-style-1',
-      },
-      {
-        key: 4,
-        label: '7',
-        click: () => addNumber(7),
-        className: 'button-style-1',
-      },
-      {
-        key: 5,
-        label: '8',
-        click: () => addNumber(8),
-        className: 'button-style-1',
-      },
-      {
-        key: 6,
-        label: '9',
-        click: () => addNumber(9),
-        className: 'button-style-1',
-      },
-      {
-        key: 7,
-        label: '*',
-        click: () => addOperation(operationType.MULTIPLE),
-        className: 'button-style-1',
-      },
-      {
-        key: 8,
-        label: '4',
-        click: () => addNumber(4),
-        className: 'button-style-1',
-      },
-      {
-        key: 9,
-        label: '5',
-        click: () => addNumber(5),
-        className: 'button-style-1',
-      },
-      {
-        key: 10,
-        label: '6',
-        click: () => addNumber(6),
-        className: 'button-style-1',
-      },
-      {
-        key: 11,
-        label: '-',
-        click: () => addOperation(operationType.MINUS),
-        className: 'button-style-1',
-      },
-      {
-        key: 12,
-        label: '1',
-        click: () => addNumber(1),
-        className: 'button-style-1',
-      },
-      {
-        key: 12,
-        label: '2',
-        click: () => addNumber(2),
-        className: 'button-style-1',
-      },
-      {
-        key: 13,
-        label: '3',
-        click: () => addNumber(3),
-        className: 'button-style-1',
-      },
-      {
-        key: 14,
-        label: '+',
-        click: () => addOperation(operationType.ADD),
-        className: 'button-style-1',
-      },
-    ],
-    [
-      {
-        key: 15,
-        label: '0',
-        click: () => addNumber(0),
-        className: 'button-style-2',
-      },
-      {
-        key: 16,
-        label: '.',
-        click: () => addDot(),
-        className: 'button-style-1',
-      },
-      {
-        key: 17,
-        label: '=',
-        click: () => calculateResult(),
-        className: 'button-style-1',
-      },
-    ],
+  const keyData: Array<keyDataType> = [
+    {
+      label: 'AC',
+      click: () => clearDisplay(),
+      className: 'button-style-1',
+    },
+    {
+      label: '+/-',
+      click: () => calculateCurrentNumber(operationType.SIGN_CHANGE),
+      className: 'button-style-1',
+    },
+    {
+      label: '%',
+      click: () => calculateCurrentNumber(operationType.PERCENTAGE),
+      className: 'button-style-1',
+    },
+    {
+      label: '/',
+      click: () => addOperation(operationType.DIVIDE),
+      className: 'button-style-1',
+    },
+    {
+      label: '7',
+      click: () => addNumber(7),
+      className: 'button-style-1',
+    },
+    {
+      label: '8',
+      click: () => addNumber(8),
+      className: 'button-style-1',
+    },
+    {
+      label: '9',
+      click: () => addNumber(9),
+      className: 'button-style-1',
+    },
+    {
+      label: '*',
+      click: () => addOperation(operationType.MULTIPLE),
+      className: 'button-style-1',
+    },
+    {
+      label: '4',
+      click: () => addNumber(4),
+      className: 'button-style-1',
+    },
+    {
+      label: '5',
+      click: () => addNumber(5),
+      className: 'button-style-1',
+    },
+    {
+      label: '6',
+      click: () => addNumber(6),
+      className: 'button-style-1',
+    },
+    {
+      label: '-',
+      click: () => addOperation(operationType.MINUS),
+      className: 'button-style-1',
+    },
+    {
+      label: '1',
+      click: () => addNumber(1),
+      className: 'button-style-1',
+    },
+    {
+      label: '2',
+      click: () => addNumber(2),
+      className: 'button-style-1',
+    },
+    {
+      label: '3',
+      click: () => addNumber(3),
+      className: 'button-style-1',
+    },
+    {
+      label: '+',
+      click: () => addOperation(operationType.ADD),
+      className: 'button-style-1',
+    },
+    {
+      label: '0',
+      click: () => addNumber(0),
+      className: 'button-style-2',
+    },
+    {
+      label: '.',
+      click: () => addDot(),
+      className: 'button-style-1',
+    },
+    {
+      label: '=',
+      click: () => calculateResult(),
+      className: 'button-style-1',
+    },
   ];
 
   const calculate = (
@@ -352,23 +328,7 @@ export const App = (): ReactElement => {
         <div css={{ marginRight: '5px' }}>{display}</div>
       </div>
       <div className="grid-style-1">
-        {keyData[0].map((data: keyDataType) => {
-          return (
-            <button
-              key={data.label}
-              className={data.className}
-              onClick={(e) => {
-                e.currentTarget.blur();
-                data.click();
-              }}
-            >
-              {data.label}
-            </button>
-          );
-        })}
-      </div>
-      <div className="grid-style-2">
-        {keyData[1].map((data: keyDataType) => {
+        {keyData.map((data: keyDataType) => {
           return (
             <button
               key={data.label}
