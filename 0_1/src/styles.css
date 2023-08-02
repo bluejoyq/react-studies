@@ -51,4 +51,5 @@ button {
 
 .button-style-2 {
     aspect-ratio: 2/1;
+    grid-column: auto / span 2;
 }
